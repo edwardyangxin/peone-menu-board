@@ -31,21 +31,22 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="w-screen h-screen bg-black p-4 md:p-6 lg:p-8 flex items-center justify-center">
+    <div className="w-screen h-screen bg-black overflow-hidden">
       {/* 
         Grid Layout Definition
-        We use a 12-column grid.
-        - Left column (Logo/Title + Carousel) takes 5 columns (approx 40%)
-        - Right column (Menu) takes 7 columns (approx 60%)
-        gap-6 provides nice spacing between panels.
+        We use a 12-column grid that fills the entire viewport width and height.
+        - Left column (Logo/Title + Carousel) takes 4 columns (approx 33%)
+        - Right column (Menu) takes 8 columns (approx 67%)
+        Padding and gaps adjust based on screen size to maximize space usage.
       */}
-      <div className="w-full max-w-[1920px] aspect-video grid grid-cols-12 gap-6 h-full max-h-screen">
+      <div className="w-full h-full grid grid-cols-12 gap-4 p-4 md:gap-6 md:p-6 lg:gap-8 lg:p-8">
         
         {/* Left Column container */}
-        <div className="col-span-12 lg:col-span-4 flex flex-col gap-6 h-full">
+        <div className="col-span-12 lg:col-span-4 flex flex-col gap-4 md:gap-6 lg:gap-8 h-full min-h-0">
           
           {/* Top-Left: Now displays the Title and Subtitle of the current image */}
-          <div className="h-[25%] min-h-[180px]">
+          {/* Using percentage height to maintain proportion regardless of screen height */}
+          <div className="h-[20%] min-h-[160px] shrink-0">
             <Logo title={currentMedia.title} subtitle={currentMedia.subtitle} />
           </div>
           
@@ -57,7 +58,7 @@ const App: React.FC = () => {
         </div>
 
         {/* Right Column container - Menu */}
-        <div className="col-span-12 lg:col-span-8 h-full">
+        <div className="col-span-12 lg:col-span-8 h-full min-h-0">
           <MenuDisplay categories={MENU_DATA} highlightedItemId={highlightedItemId} />
         </div>
         
