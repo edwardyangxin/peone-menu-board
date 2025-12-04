@@ -1,3 +1,4 @@
+
 import { CarouselMedia, MenuCategory } from './types';
 
 export const APP_NAME = "Peoné";
@@ -30,7 +31,8 @@ export const CAROUSEL_DATA: CarouselMedia[] = [
   {
     id: '3',
     type: 'image',
-    url: 'https://files.catbox.moe/a81k5x.png',
+    // url: 'https://files.catbox.moe/a81k5x.png', // ori. image 
+    url: 'https://files.catbox.moe/ui5cvr.png', // promotion image
     title: 'Hot Dog',
     subtitle: 'Japanese BBQ or Honey Sweet',
     main_dish_id: 3
@@ -61,7 +63,17 @@ export const MENU_DATA: MenuCategory[] = [
       { id: 'm1', name: 'Teriyaki Beef With Rice', price: 12.99, isPopular: true, description: 'Beef with broccoli, cabbage, and carrot, served with rice' },
       { id: 'm2', name: 'Teriyaki Chicken With Rice', price: 12.99, isPopular: true, description: 'Chicken with broccoli, cabbage, and carrot, served with rice' },
       { id: 'm3', name: 'Teriyaki Beef and Chicken Combo With Rice', price: 13.99, isPopular: true, description: 'Beef and chicken with broccoli, cabbage, and carrot, served with rice' },
-      { id: 'm4', name: 'Hot Dog', price: 6.99, isPopular: true, isSpicy: false, isComingSoon: false, description: 'Japanese BBQ or Honey Sweet' },
+      { 
+        id: 'm4', 
+        name: 'Hot Dog', 
+        price: 5.99, 
+        originalPrice: 6.99, // Promotion config
+        isPopular: true, 
+        isSpicy: false, 
+        isComingSoon: false, 
+        isPromotion: true,
+        description: 'Japanese BBQ or Honey Sweet' 
+      },
       // { id: 'm4', name: 'Wild Mushroom Risotto', price: 26, description: 'Arborio rice, parmesan crisp' },
       // { id: 'm5', name: 'Classic Burger', price: 18, description: 'Angus beef, cheddar, brioche bun' },
       { id: 'm5', name: 'Soft Drink', price: 2, description: 'Pepsi, Diet Pepsi, Canada Dry or similar soft drinks' },

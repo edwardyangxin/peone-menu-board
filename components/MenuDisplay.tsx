@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { MenuCategory, MenuItem } from '../types';
-import { Flame, Star, UtensilsCrossed, Clock } from 'lucide-react';
+import { Flame, Star, UtensilsCrossed, Clock, Megaphone } from 'lucide-react';
 import { APP_NAME } from '../constants';
 
 interface MenuDisplayProps {
@@ -44,6 +45,11 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
                 <Clock className="w-[1.5vh] h-[1.5vh] mr-[0.5vh]" /> COMING SOON
               </span>
             )}
+            {item.isPromotion && (
+              <span className="flex items-center font-bold text-white bg-gradient-to-r from-red-600 to-rose-500 px-[0.8vh] py-[0.2vh] rounded-full shadow-[0_0_10px_rgba(225,29,72,0.4)] text-[1.5vh]">
+                <Megaphone className="w-[1.5vh] h-[1.5vh] mr-[0.5vh] fill-white" /> PROMOTION
+              </span>
+            )}
           </div>
         </div>
         {item.description && (
@@ -52,14 +58,29 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
           </p>
         )}
       </div>
-      <div className="flex items-end">
-        <span 
-          className={`font-serif font-bold tabular-nums transition-colors duration-300 text-[3.5vh] ${
-            isHighlighted ? 'text-amber-500' : 'text-amber-500'
-          }`}
-        >
-          ${item.price}
-        </span>
+      
+      {/* Price Section */}
+      <div className="flex flex-col items-end justify-center">
+        {item.originalPrice ? (
+          // Promotion Display
+          <>
+            <span className="text-zinc-500 line-through text-[2vh] decoration-zinc-500/50 decoration-[0.2vh] leading-none mb-[0.5vh]">
+              ${item.originalPrice}
+            </span>
+            <span className={`font-serif font-bold tabular-nums text-[3.5vh] leading-none text-red-500`}>
+              ${item.price}
+            </span>
+          </>
+        ) : (
+          // Standard Price Display
+          <span 
+            className={`font-serif font-bold tabular-nums transition-colors duration-300 text-[3.5vh] ${
+              isHighlighted ? 'text-amber-500' : 'text-amber-500'
+            }`}
+          >
+            ${item.price}
+          </span>
+        )}
       </div>
     </div>
   );
