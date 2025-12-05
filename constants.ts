@@ -32,7 +32,8 @@ export const CAROUSEL_DATA: CarouselMedia[] = [
     id: '3',
     type: 'image',
     // url: 'https://files.catbox.moe/a81k5x.png', // ori. image 
-    url: 'https://files.catbox.moe/yc8x3q.png', // promotion image
+    // url: 'https://files.catbox.moe/yc8x3q.png', // promotion image
+    url: './hotdog_promo_v3.png',
     title: 'Hot Dog',
     subtitle: 'Japanese BBQ or Honey Sweet',
     main_dish_id: 3
