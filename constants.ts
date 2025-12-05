@@ -4,22 +4,22 @@ import { CarouselMedia, MenuCategory } from './types';
 export const APP_NAME = "Peoné";
 
 export const CAROUSEL_DATA: CarouselMedia[] = [
-  {
-    id: '1',
-    type: 'image',
-    url: 'https://files.catbox.moe/nshry9.png',
-    title: 'Teriyaki Beef',
-    subtitle: 'with broccoli, cabbage, and carrot',
-    main_dish_id: 0
-  },
-  {
-    id: '1.2',
-    type: 'image',
-    url: 'https://files.catbox.moe/ky94r2.png',
-    title: 'Teriyaki Chicken',
-    subtitle: 'with broccoli, cabbage, and carrot',
-    main_dish_id: 1
-  },
+  // {
+  //   id: '1',
+  //   type: 'image',
+  //   url: 'https://files.catbox.moe/nshry9.png',
+  //   title: 'Teriyaki Beef',
+  //   subtitle: 'with broccoli, cabbage, and carrot',
+  //   main_dish_id: 0
+  // },
+  // {
+  //   id: '1.2',
+  //   type: 'image',
+  //   url: 'https://files.catbox.moe/ky94r2.png',
+  //   title: 'Teriyaki Chicken',
+  //   subtitle: 'with broccoli, cabbage, and carrot',
+  //   main_dish_id: 1
+  // },
   // {
   //   id: '2',
   //   type: 'image',
