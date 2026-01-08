@@ -35,7 +35,7 @@ export const CAROUSEL_DATA: CarouselMedia[] = [
     // url: 'https://files.catbox.moe/yc8x3q.png', // promotion image
     url: './hotdog_promo_v3.png',
     title: 'Hot Dog',
-    subtitle: 'Japanese BBQ or Honey Sweet',
+    subtitle: 'Japanese BBQ',
     main_dish_id: 3
   },
   // {
@@ -73,7 +73,7 @@ export const MENU_DATA: MenuCategory[] = [
         isSpicy: false, 
         isComingSoon: false, 
         isPromotion: true,
-        description: 'Japanese BBQ or Honey Sweet' 
+        description: 'Japanese BBQ' 
       },
       // { id: 'm4', name: 'Wild Mushroom Risotto', price: 26, description: 'Arborio rice, parmesan crisp' },
       // { id: 'm5', name: 'Classic Burger', price: 18, description: 'Angus beef, cheddar, brioche bun' },
