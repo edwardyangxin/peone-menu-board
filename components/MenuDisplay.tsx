@@ -133,8 +133,8 @@ const MenuDisplay: React.FC<MenuDisplayProps> = ({ categories, highlightedItemId
           <div key={category.id} className={`flex flex-col ${catIdx === categories.length - 1 ? 'flex-[1.5]' : 'flex-1'} min-h-0`}>
             {/* Category Header */}
             <h2 className="font-serif font-bold text-white mb-[2vh] flex items-center text-[4.5vh] shrink-0">
-              <span className="bg-zinc-800 w-[6vh] h-[6vh] rounded-full flex items-center justify-center mr-[1.5vh] text-[2.5vh] text-amber-500 border border-zinc-700 shadow-inner">
-                 {category.title.charAt(0)}
+              <span className="bg-zinc-800 w-[6vh] h-[6vh] rounded-full flex items-center justify-center mr-[1.5vh] text-amber-500 border border-zinc-700 shadow-inner">
+                <UtensilsCrossed className="w-[2.8vh] h-[2.8vh]" strokeWidth={2} />
               </span>
               {category.title}
               <div className="flex-1 h-px bg-zinc-800 ml-[2vh]"></div>
