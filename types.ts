@@ -4,11 +4,13 @@ export interface MenuItem {
   name: string;
   description?: string;
   price: number;
+  showNumber?: boolean;
   originalPrice?: number; // Optional: if defined, shows this as the struck-through price
   isPopular?: boolean;
   isSpicy?: boolean;
   isComingSoon?: boolean;
   isPromotion?: boolean;
+  isSeasonalSpecial?: boolean;
 }
 
 export interface MenuCategory {

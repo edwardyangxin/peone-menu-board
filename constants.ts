@@ -38,6 +38,22 @@ export const CAROUSEL_DATA: CarouselMedia[] = [
     subtitle: 'Japanese BBQ',
     main_dish_id: 3
   },
+  {
+    id: '4',
+    type: 'image',
+    url: './fried_rice.png',
+    title: 'Chicken Fried Rice',
+    subtitle: 'chicken, corn, and carrots',
+    main_dish_id: 4
+  },
+  {
+    id: '5',
+    type: 'image',
+    url: './fried_soba.png',
+    title: 'Chow Mein',
+    subtitle: 'chicken and cabbage',
+    main_dish_id: 4
+  },
   // {
   //   id: '4',
   //   type: 'image',
@@ -75,10 +91,11 @@ export const MENU_DATA: MenuCategory[] = [
         isPromotion: true,
         description: 'Japanese BBQ' 
       },
+      { id: 'm7', name: 'Chicken Fried Rice/Chow Mein', price: 7.99, isPopular: true, isSeasonalSpecial: true, description: 'Chicken Fried Rice with corn and carrots. Chow Mein with chicken and cabbage.' },
       // { id: 'm4', name: 'Wild Mushroom Risotto', price: 26, description: 'Arborio rice, parmesan crisp' },
       // { id: 'm5', name: 'Classic Burger', price: 18, description: 'Angus beef, cheddar, brioche bun' },
-      { id: 'm5', name: 'Soft Drink', price: 2, description: 'Pepsi, Diet Pepsi, Canada Dry or similar soft drinks' },
-      { id: 'm6', name: 'Bottled Water', price: 1 },
+      { id: 'm5', name: 'Soft Drink', price: 2, showNumber: false, description: 'Pepsi, Diet Pepsi, Canada Dry or similar soft drinks' },
+      { id: 'm6', name: 'Bottled Water', price: 1, showNumber: false },
     ]
   },
   // {

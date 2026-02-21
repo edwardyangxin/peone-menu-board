@@ -9,7 +9,7 @@ const App: React.FC = () => {
 
   // Main slideshow timer controls both the Carousel image and the Logo title
   useEffect(() => {
-    const slideDuration = 8000; // 8 seconds per slide
+    const slideDuration = 5000; // 5 seconds per slide
     const interval = setInterval(() => {
       setCurrentMediaIndex((prev) => (prev + 1) % CAROUSEL_DATA.length);
     }, slideDuration);

@@ -14,7 +14,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ media, currentIndex }) =>
   useEffect(() => {
     setProgress(0);
     // Matches the duration in App.tsx
-    const slideDuration = 8000; 
+    const slideDuration = 5000; 
     
     // Update progress bar every 50ms
     const progressInterval = setInterval(() => {

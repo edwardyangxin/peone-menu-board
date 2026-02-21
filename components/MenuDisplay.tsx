@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { MenuCategory, MenuItem } from '../types';
-import { Flame, Star, UtensilsCrossed, Clock, Megaphone } from 'lucide-react';
+import { Flame, Star, UtensilsCrossed, Clock, Megaphone, Sparkles } from 'lucide-react';
 import { APP_NAME } from '../constants';
 
 interface MenuDisplayProps {
@@ -10,6 +10,8 @@ interface MenuDisplayProps {
 }
 
 const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: boolean }> = ({ item, index, isHighlighted }) => {
+  const shouldShowNumber = item.showNumber !== false;
+
   return (
     <div 
       className={`flex justify-between items-center px-[2vh] -mx-[2vh] rounded-lg transition-all duration-500 ease-out ${
@@ -27,7 +29,7 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
                 : 'text-zinc-100'
             }`}
           >
-            {index + 1}. {item.name}
+            {shouldShowNumber ? `${index + 1}. ${item.name}` : item.name}
           </h3>
           <div className="flex gap-[0.5vh]">
             {item.isPopular && (
@@ -48,6 +50,11 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
             {item.isPromotion && (
               <span className="flex items-center font-bold text-white bg-gradient-to-r from-red-600 to-rose-500 px-[0.8vh] py-[0.2vh] rounded-full shadow-[0_0_10px_rgba(225,29,72,0.4)] text-[1.5vh]">
                 <Megaphone className="w-[1.5vh] h-[1.5vh] mr-[0.5vh] fill-white" /> PROMOTION
+              </span>
+            )}
+            {item.isSeasonalSpecial && (
+              <span className="flex items-center font-bold text-emerald-300 bg-emerald-400/10 px-[0.8vh] py-[0.2vh] rounded-full border border-emerald-400/30 text-[1.5vh]">
+                <Sparkles className="w-[1.5vh] h-[1.5vh] mr-[0.5vh]" /> SEASONAL SPECIAL
               </span>
             )}
           </div>
