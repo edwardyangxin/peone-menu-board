@@ -159,7 +159,7 @@ const MenuDisplay: React.FC<MenuDisplayProps> = ({ categories, highlightedItemId
 
         {/* Footer Text */}
         <div className="text-center text-zinc-500 border-t border-zinc-800 pt-[2vh] mt-[1vh] shrink-0 text-[1.8vh]">
-          <p>Please inform our staff of any food allergies. Prices include VAT.</p>
+          <p>Please inform our staff of any food allergies.</p>
         </div>
       </div>
     </div>
