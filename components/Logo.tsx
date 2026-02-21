@@ -25,9 +25,10 @@ const Logo: React.FC<LogoProps> = ({ title, subtitle }) => {
   };
 
   return (
-    <div className="h-full w-full bg-zinc-900 rounded-3xl border border-zinc-800 flex flex-col items-center justify-center shadow-2xl px-[1vh] py-[1vh] relative overflow-hidden group text-center">
+    <div className="h-full w-full bg-gradient-to-br from-[#b50f1a] via-[#980d17] to-[#6f0a12] rounded-3xl border border-[#f3c453]/70 flex flex-col items-center justify-center shadow-2xl px-[1vh] py-[1vh] relative overflow-hidden group text-center">
+      <div className="absolute top-0 left-0 w-full h-[0.9vh] bg-gradient-to-r from-[#ffde7a] via-[#f9c62b] to-[#ffde7a]"></div>
       {/* Background decorative glow */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-amber-500/10 to-transparent opacity-50"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-amber-200/18 to-transparent opacity-60"></div>
       
       {/* Dynamic Title Display */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full w-full min-h-0">
@@ -39,13 +40,13 @@ const Logo: React.FC<LogoProps> = ({ title, subtitle }) => {
         </h1>
         
         {/* Separator Line - Reduced margins to save vertical space */}
-        <div className="h-[0.5vh] w-[8vh] bg-amber-500 my-[1vh] rounded-full opacity-80 shrink-0"></div>
+        <div className="h-[0.45vh] w-[8vh] bg-[#f9c62b] my-[1vh] rounded-full shrink-0"></div>
         
         {/* Subtitle Display */}
         {subtitle && (
            <p 
              key={`sub-${title}`} // Re-trigger animation when text changes
-             className={`text-zinc-400 font-light leading-[1.15] max-w-[98%] max-h-[24%] overflow-hidden animate-fadeIn ${getSubtitleSizeClass(subtitle)}`}
+             className={`text-[#ffe8c7]/90 font-medium leading-[1.15] max-w-[98%] max-h-[24%] overflow-hidden animate-fadeIn ${getSubtitleSizeClass(subtitle)}`}
            >
              {subtitle}
            </p>

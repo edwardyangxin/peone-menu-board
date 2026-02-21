@@ -39,29 +39,24 @@ const App: React.FC = () => {
         - Right column (Menu) takes 8 columns (approx 67%)
         Padding and gaps adjust based on screen size to maximize space usage.
       */}
-      <div className="w-full h-full grid grid-cols-12 gap-4 p-4 md:gap-6 md:p-6 lg:gap-8 lg:p-8">
-        
-        {/* Left Column container */}
-        <div className="col-span-12 lg:col-span-4 flex flex-col gap-4 md:gap-6 lg:gap-8 h-full min-h-0">
-          
-          {/* Top-Left: Now displays the Title and Subtitle of the current image */}
-          {/* Using percentage height to maintain proportion regardless of screen height */}
-          <div className="h-[20%] min-h-[160px] shrink-0">
+      <div className="w-full h-full grid grid-cols-[30%_70%] gap-4 p-4 md:gap-6 md:p-6 lg:gap-8 lg:p-8">
+        {/* Left Column: width-driven layout */}
+        <div className="h-full min-h-0 grid grid-rows-[1fr_auto] gap-4 md:gap-6 lg:gap-8">
+          {/* Top-Left: flexible area (takes remaining height) */}
+          <div className="min-h-0">
             <Logo title={currentMedia.title} subtitle={currentMedia.subtitle} />
           </div>
-          
-          {/* Bottom-Left: Carousel Area (Image only) */}
-          <div className="flex-1 min-h-0">
+
+          {/* Bottom-Left: height is derived from left-column width via fixed aspect ratio */}
+          <div className="w-full aspect-[3/4]">
             <MediaCarousel media={CAROUSEL_DATA} currentIndex={currentMediaIndex} />
           </div>
-          
         </div>
 
         {/* Right Column container - Menu */}
-        <div className="col-span-12 lg:col-span-8 h-full min-h-0">
+        <div className="h-full min-h-0">
           <MenuDisplay categories={MENU_DATA} highlightedItemId={highlightedItemId} />
         </div>
-        
       </div>
     </div>
   );

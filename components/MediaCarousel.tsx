@@ -27,7 +27,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ media, currentIndex }) =>
   const currentItem = media[currentIndex];
 
   return (
-    <div className="h-full w-full bg-zinc-900 rounded-3xl border border-zinc-800 overflow-hidden relative shadow-2xl group">
+    <div className="h-full w-full bg-gradient-to-br from-[#2a0f0e] via-[#1f0908] to-[#120505] rounded-3xl border border-[#f3c453]/60 overflow-hidden relative shadow-2xl group">
       {/* Custom Animation Styles */}
       <style>{`
          @keyframes fadeInScale {
@@ -48,29 +48,26 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ media, currentIndex }) =>
             className="w-full h-full object-cover blur-2xl opacity-40 scale-125 transition-all duration-1000"
           />
          {/* Dark overlay to ensure text/ui readability if needed */}
-         <div className="absolute inset-0 bg-zinc-950/20"></div>
+         <div className="absolute inset-0 bg-[#2b0b0d]/20"></div>
       </div>
 
       {/* Main Layer: Sharp image fitted to container height (Height priority) */}
-      {/* overflow-hidden on parent clips the wide images that overflow */}
+      {/* Keep full image content visible inside fixed 9:16 frame */}
       <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden">
          <img
             key={currentItem.id}
             src={currentItem.url}
             alt={currentItem.title}
-            // h-full forces height to match container. 
-            // w-auto maintains aspect ratio. 
-            // max-w-none allows width to exceed container width (cropping sides for wide images).
-            className="h-full w-auto max-w-none animate-fadeInScale drop-shadow-2xl z-10"
+            className="w-full h-full object-contain animate-fadeInScale drop-shadow-2xl z-10"
           />
       </div>
 
       {/* Progress Bar Indicators - Moved to bottom right */}
       <div className="absolute bottom-6 right-6 flex space-x-2 z-30">
         {media.map((_, idx) => (
-          <div key={idx} className="h-1.5 w-8 bg-zinc-700/50 rounded-full overflow-hidden backdrop-blur-sm shadow-sm">
+          <div key={idx} className="h-1.5 w-8 bg-[#f3c453]/25 rounded-full overflow-hidden backdrop-blur-sm shadow-sm">
             <div 
-              className={`h-full bg-amber-500 transition-all duration-300 ${idx === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+              className={`h-full bg-[#f9c62b] transition-all duration-300 ${idx === currentIndex ? 'opacity-100' : 'opacity-0'}`}
               style={{ width: idx === currentIndex ? `${progress}%` : '0%' }}
             ></div>
           </div>
@@ -78,7 +75,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ media, currentIndex }) =>
       </div>
 
       {/* Badge/Tag */}
-      <div className="absolute top-6 left-6 bg-amber-500 text-zinc-950 font-bold px-4 py-1 rounded-full uppercase tracking-wider text-sm shadow-lg z-30">
+      <div className="absolute top-6 left-6 bg-[#f9c62b] text-[#5e0a11] font-black px-4 py-1 rounded-full uppercase tracking-wider text-sm shadow-lg z-30">
         Featured
       </div>
     </div>

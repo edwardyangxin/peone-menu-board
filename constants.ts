@@ -79,7 +79,7 @@ export const MENU_DATA: MenuCategory[] = [
     items: [
       { id: 'm1', name: 'Teriyaki Beef With Rice', price: 12.99, isPopular: true, description: 'Beef with broccoli, cabbage, and carrot, served with rice' },
       { id: 'm2', name: 'Teriyaki Chicken With Rice', price: 12.99, isPopular: true, description: 'Chicken with broccoli, cabbage, and carrot, served with rice' },
-      { id: 'm3', name: 'Teriyaki Beef and Chicken Combo With Rice', price: 13.99, isPopular: true, description: 'Beef and chicken with broccoli, cabbage, and carrot, served with rice' },
+      { id: 'm3', name: 'Teriyaki Beef and Chicken Combo With Rice', price: 13.99, isPopular: false, description: 'Beef and chicken with broccoli, cabbage, and carrot, served with rice' },
       { 
         id: 'm4', 
         name: 'Hot Dog', 

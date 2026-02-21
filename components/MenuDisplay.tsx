@@ -1,90 +1,120 @@
-
 import React from 'react';
 import { MenuCategory, MenuItem } from '../types';
 import { Flame, Star, UtensilsCrossed, Clock, Megaphone, Sparkles } from 'lucide-react';
-import { APP_NAME } from '../constants';
 
 interface MenuDisplayProps {
   categories: MenuCategory[];
   highlightedItemId?: string;
 }
 
+const TagPill: React.FC<{ children: React.ReactNode; icon?: React.ReactNode; highlighted?: boolean }> = ({ children, icon, highlighted }) => (
+  <span
+    className={`inline-flex items-center font-extrabold px-[0.75vh] py-[0.2vh] rounded-full text-[1.35vh] tracking-wide ${
+      highlighted ? 'bg-[#7d0a13] text-[#f9c62b]' : 'bg-[#f9c62b] text-[#5e0a11]'
+    }`}
+  >
+    {icon}
+    {children}
+  </span>
+);
+
 const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: boolean }> = ({ item, index, isHighlighted }) => {
   const shouldShowNumber = item.showNumber !== false;
+  const descriptionIndentClass = shouldShowNumber ? 'pl-[4vh]' : 'pl-[0.2vh]';
 
   return (
-    <div 
-      className={`flex justify-between items-center px-[2vh] -mx-[2vh] rounded-lg transition-all duration-500 ease-out ${
-        isHighlighted 
-          ? 'border-transparent shadow-xl scale-[1.02] z-10' 
-          : 'border-transparent'
+    <div
+      className={`flex justify-between items-start px-[1.6vh] py-[0.85vh] rounded-[1.1vh] transition-all duration-300 ${
+        isHighlighted ? 'bg-[#f9c62b] text-[#4f0810] shadow-[inset_0_0_0_1px_rgba(125,10,19,0.2)]' : 'text-white'
       }`}
     >
-      <div className="flex-1 pr-[2vh]">
-        <div className="flex items-center gap-[1vh] mb-[0.5vh]">
-          <h3 
-            className={`font-bold leading-none transition-colors duration-300 text-[3.2vh] ${
-              isHighlighted 
-                ? 'text-amber-500' 
-                : 'text-zinc-100'
-            }`}
-          >
-            {shouldShowNumber ? `${index + 1}. ${item.name}` : item.name}
+      <div className="flex-1 pr-[1.5vh] min-w-0">
+        <div className="flex items-center gap-[0.8vh] mb-[0.35vh] flex-wrap">
+          {shouldShowNumber && (
+            <span
+              className={`w-[3.2vh] h-[3.2vh] rounded-full flex items-center justify-center text-[2vh] font-black leading-none shrink-0 ${
+                isHighlighted ? 'bg-[#7d0a13] text-[#f9c62b]' : 'bg-[#f9c62b] text-[#7d0a13]'
+              }`}
+            >
+              {index + 1}
+            </span>
+          )}
+
+          <h3 className={`font-extrabold leading-none text-[4vh] md:text-[3.9vh] ${isHighlighted ? 'text-[#5a0810]' : 'text-white'}`}>
+            {item.name}
           </h3>
-          <div className="flex gap-[0.5vh]">
+
+          <div className="flex gap-[0.45vh] flex-wrap">
             {item.isPopular && (
-              <span className="flex items-center font-bold text-amber-500 bg-amber-500/10 px-[0.8vh] py-[0.2vh] rounded-full border border-amber-500/20 text-[1.5vh]">
-                <Star className="w-[1.5vh] h-[1.5vh] mr-[0.5vh] fill-amber-500" /> POPULAR
-              </span>
+              <TagPill
+                highlighted={isHighlighted}
+                icon={<Star className="w-[1.25vh] h-[1.25vh] mr-[0.25vh] fill-current" />}
+              >
+                POPULAR
+              </TagPill>
             )}
             {item.isSpicy && (
-              <span className="flex items-center font-bold text-red-500 bg-red-500/10 px-[0.8vh] py-[0.2vh] rounded-full border border-red-500/20 text-[1.5vh]">
-                <Flame className="w-[1.5vh] h-[1.5vh] mr-[0.5vh] fill-red-500" /> SPICY
-              </span>
+              <TagPill
+                highlighted={isHighlighted}
+                icon={<Flame className="w-[1.25vh] h-[1.25vh] mr-[0.25vh] fill-current" />}
+              >
+                SPICY
+              </TagPill>
             )}
             {item.isComingSoon && (
-              <span className="flex items-center font-bold text-blue-400 bg-blue-400/10 px-[0.8vh] py-[0.2vh] rounded-full border border-blue-400/20 text-[1.5vh]">
-                <Clock className="w-[1.5vh] h-[1.5vh] mr-[0.5vh]" /> COMING SOON
-              </span>
+              <TagPill
+                highlighted={isHighlighted}
+                icon={<Clock className="w-[1.25vh] h-[1.25vh] mr-[0.25vh]" />}
+              >
+                COMING SOON
+              </TagPill>
             )}
             {item.isPromotion && (
-              <span className="flex items-center font-bold text-white bg-gradient-to-r from-red-600 to-rose-500 px-[0.8vh] py-[0.2vh] rounded-full shadow-[0_0_10px_rgba(225,29,72,0.4)] text-[1.5vh]">
-                <Megaphone className="w-[1.5vh] h-[1.5vh] mr-[0.5vh] fill-white" /> PROMOTION
-              </span>
+              <TagPill
+                highlighted={isHighlighted}
+                icon={<Megaphone className="w-[1.25vh] h-[1.25vh] mr-[0.25vh] fill-current" />}
+              >
+                PROMOTION
+              </TagPill>
             )}
             {item.isSeasonalSpecial && (
-              <span className="flex items-center font-bold text-emerald-300 bg-emerald-400/10 px-[0.8vh] py-[0.2vh] rounded-full border border-emerald-400/30 text-[1.5vh]">
-                <Sparkles className="w-[1.5vh] h-[1.5vh] mr-[0.5vh]" /> SEASONAL SPECIAL
-              </span>
+              <TagPill
+                highlighted={isHighlighted}
+                icon={<Sparkles className="w-[1.25vh] h-[1.25vh] mr-[0.25vh]" />}
+              >
+                SEASONAL SPECIAL
+              </TagPill>
             )}
           </div>
         </div>
+
         {item.description && (
-          <p className={`leading-tight font-light transition-colors text-[2vh] ${isHighlighted ? 'text-amber-500' : 'text-zinc-400'}`}>
+          <p
+            className={`leading-tight text-[2.05vh] ${descriptionIndentClass} ${
+              isHighlighted ? 'text-[#5a0810]/95 font-semibold' : 'text-[#f5d8d8] font-medium'
+            }`}
+          >
             {item.description}
           </p>
         )}
       </div>
-      
-      {/* Price Section */}
-      <div className="flex flex-col items-end justify-center">
+
+      <div className="flex flex-col items-end justify-start pt-[0.2vh] shrink-0">
         {item.originalPrice ? (
-          // Promotion Display
           <>
-            <span className="text-zinc-500 line-through text-[2vh] decoration-zinc-500/50 decoration-[0.2vh] leading-none mb-[0.5vh]">
+            <span
+              className={`line-through text-[2.25vh] leading-none mb-[0.3vh] ${
+                isHighlighted ? 'text-[#7d0a13]/70' : 'text-[#f5d8d8]/70'
+              }`}
+            >
               ${item.originalPrice}
             </span>
-            <span className={`font-serif font-bold tabular-nums text-[3.5vh] leading-none text-red-500`}>
+            <span className={`font-black tabular-nums text-[4.6vh] leading-none ${isHighlighted ? 'text-[#5a0810]' : 'text-white'}`}>
               ${item.price}
             </span>
           </>
         ) : (
-          // Standard Price Display
-          <span 
-            className={`font-serif font-bold tabular-nums transition-colors duration-300 text-[3.5vh] ${
-              isHighlighted ? 'text-amber-500' : 'text-amber-500'
-            }`}
-          >
+          <span className={`font-black tabular-nums text-[4.6vh] leading-none ${isHighlighted ? 'text-[#5a0810]' : 'text-white'}`}>
             ${item.price}
           </span>
         )}
@@ -95,70 +125,31 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
 
 const MenuDisplay: React.FC<MenuDisplayProps> = ({ categories, highlightedItemId }) => {
   return (
-    <div className="h-full w-full bg-zinc-900 rounded-3xl border border-zinc-800 shadow-2xl relative overflow-hidden flex flex-col group">
-       {/* Header decorative line */}
-       <div className="absolute top-0 left-0 w-full h-[1vh] bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 z-20"></div>
+    <div className="h-full w-full bg-gradient-to-br from-[#b60f1b] via-[#9a0d18] to-[#760a13] rounded-3xl border border-[#f3c453]/70 shadow-2xl relative overflow-hidden flex flex-col">
+      <div className="absolute top-0 left-0 w-full h-[0.9vh] bg-gradient-to-r from-[#ffde7a] via-[#f9c62b] to-[#ffde7a] z-20"></div>
 
-       {/* Custom Styles for Lightbox Effect */}
-       <style>{`
-         @keyframes neon-pulse {
-           0%, 100% { 
-             opacity: 0.3; 
-             filter: drop-shadow(0 0 2px rgba(225, 29, 72, 0.3));
-           }
-           50% { 
-             opacity: 1; 
-             filter: drop-shadow(0 0 10px rgba(255, 40, 90, 0.8)) drop-shadow(0 0 30px rgba(255, 40, 90, 0.4));
-           }
-         }
-       `}</style>
-
-       {/* Floating Watermark Logo - "Lightbox" Effect */}
-       <div 
-          className="absolute bottom-[-2vh] right-[-2vh] z-0 pointer-events-none select-none text-rose-600"
-          style={{ animation: 'neon-pulse 4s ease-in-out infinite' }}
-       >
-          <div className="flex flex-col items-center justify-center border-[0.6vh] border-current rounded-full w-[40vh] h-[40vh] transform -rotate-12 shadow-inner bg-rose-950/10">
-             <UtensilsCrossed className="mb-[2vh] w-[12vh] h-[12vh]" strokeWidth={1} />
-             <span className="font-serif text-[7vh] font-bold tracking-widest uppercase">{APP_NAME}</span>
-             <span className="text-[1.8vh] tracking-[0.8em] mt-[1vh] font-light uppercase border-t border-current pt-[1vh] w-[15vh] text-center">EST. 2024</span>
-          </div>
-       </div>
-
-      {/* Auto-fitting Content Container */}
-      <div className="flex-1 flex flex-col p-[4vh] relative z-10 h-full justify-between">
-        
-        {/* Distribute categories evenly */}
+      <div className="flex-1 flex flex-col p-[3.5vh] relative z-10 h-full justify-between">
         {categories.map((category, catIdx) => (
-          <div key={category.id} className={`flex flex-col ${catIdx === categories.length - 1 ? 'flex-[1.5]' : 'flex-1'} min-h-0`}>
-            {/* Category Header */}
-            <h2 className="font-serif font-bold text-white mb-[2vh] flex items-center text-[4.5vh] shrink-0">
-              <span className="bg-zinc-800 w-[6vh] h-[6vh] rounded-full flex items-center justify-center mr-[1.5vh] text-amber-500 border border-zinc-700 shadow-inner">
-                <UtensilsCrossed className="w-[2.8vh] h-[2.8vh]" strokeWidth={2} />
+          <div key={category.id} className={`flex flex-col ${catIdx === categories.length - 1 ? 'flex-[1.45]' : 'flex-1'} min-h-0`}>
+            <h2 className="font-serif font-bold text-white mb-[1.8vh] flex items-center text-[4.4vh] shrink-0">
+              <span className="bg-[#7d0a13] w-[5.6vh] h-[5.6vh] rounded-full flex items-center justify-center mr-[1.3vh] text-[#f9c62b] border border-[#f3c453]/60 shadow-inner">
+                <UtensilsCrossed className="w-[2.6vh] h-[2.6vh]" strokeWidth={2.1} />
               </span>
               {category.title}
-              <div className="flex-1 h-px bg-zinc-800 ml-[2vh]"></div>
+              <div className="flex-1 h-px bg-[#f3c453]/40 ml-[1.8vh]"></div>
             </h2>
-            
-            {/* Items Grid - Distributes items evenly in the remaining space */}
-            <div className="flex-1 flex flex-col justify-evenly">
+
+            <div className="flex-1 flex flex-col justify-evenly gap-[0.3vh]">
               {category.items.map((item, idx) => (
-                <MenuItemRow 
-                  key={item.id} 
-                  item={item} 
-                  index={idx} 
-                  isHighlighted={item.id === highlightedItemId}
-                />
+                <MenuItemRow key={item.id} item={item} index={idx} isHighlighted={item.id === highlightedItemId} />
               ))}
             </div>
-            
-            {/* Spacer between categories if not last */}
-            {catIdx !== categories.length - 1 && <div className="h-[3vh] shrink-0"></div>}
+
+            {catIdx !== categories.length - 1 && <div className="h-[2.6vh] shrink-0"></div>}
           </div>
         ))}
 
-        {/* Footer Text */}
-        <div className="text-center text-zinc-500 border-t border-zinc-800 pt-[2vh] mt-[1vh] shrink-0 text-[1.8vh]">
+        <div className="text-center text-[#ffe8c7]/90 border-t border-[#f3c453]/45 pt-[2vh] mt-[1vh] shrink-0 text-[1.8vh] font-medium">
           <p>Please inform our staff of any food allergies.</p>
         </div>
       </div>
