@@ -1,41 +1,97 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from './components/Logo';
 import MediaCarousel from './components/MediaCarousel';
 import MenuDisplay from './components/MenuDisplay';
+import ConfigModal from './components/ConfigModal';
 import { MENU_DATA, CAROUSEL_DATA, SOLD_OUT_ITEM_IDS } from './constants';
+import { MenuCategory, CarouselMedia } from './types';
+import { Settings2 } from 'lucide-react';
+
+const CONFIG_STORAGE_KEY = 'peony-menu-board-config-v1';
+
+interface PersistedConfig {
+  menuData: MenuCategory[];
+  carouselData: CarouselMedia[];
+}
+
+const buildDefaultMenuData = (): MenuCategory[] => {
+  const soldOutSet = new Set(SOLD_OUT_ITEM_IDS);
+  return MENU_DATA.map((category) => ({
+    ...category,
+    items: category.items.map((item) => ({
+      ...item,
+      isSoldOut: item.isSoldOut || soldOutSet.has(item.id),
+    })),
+  }));
+};
+
+const buildDefaultCarouselData = (): CarouselMedia[] =>
+  CAROUSEL_DATA.map((item) => ({ ...item }));
+
+const loadPersistedConfig = (): PersistedConfig | null => {
+  try {
+    const raw = localStorage.getItem(CONFIG_STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw) as PersistedConfig;
+    if (!parsed?.menuData || !parsed?.carouselData) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+};
 
 const App: React.FC = () => {
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-  const soldOutItemIdSet = useMemo(() => new Set(SOLD_OUT_ITEM_IDS), []);
-  const menuDataWithSoldOut = useMemo(
-    () =>
-      MENU_DATA.map((category) => ({
-        ...category,
-        items: category.items.map((item) => ({
-          ...item,
-          isSoldOut: item.isSoldOut || soldOutItemIdSet.has(item.id),
-        })),
-      })),
-    [soldOutItemIdSet],
-  );
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [menuData, setMenuData] = useState<MenuCategory[]>(() => buildDefaultMenuData());
+  const [carouselData, setCarouselData] = useState<CarouselMedia[]>(() => buildDefaultCarouselData());
+
+  useEffect(() => {
+    const persisted = loadPersistedConfig();
+    if (persisted) {
+      setMenuData(persisted.menuData);
+      setCarouselData(persisted.carouselData);
+    }
+  }, []);
+
+  useEffect(() => {
+    const payload: PersistedConfig = {
+      menuData,
+      carouselData,
+    };
+    localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(payload));
+  }, [menuData, carouselData]);
 
   // Main slideshow timer controls both the Carousel image and the Logo title
   useEffect(() => {
+    if (carouselData.length === 0) {
+      return undefined;
+    }
     const slideDuration = 5000; // 5 seconds per slide
     const interval = setInterval(() => {
-      setCurrentMediaIndex((prev) => (prev + 1) % CAROUSEL_DATA.length);
+      setCurrentMediaIndex((prev) => (prev + 1) % carouselData.length);
     }, slideDuration);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [carouselData.length]);
 
-  const currentMedia = CAROUSEL_DATA[currentMediaIndex];
+  useEffect(() => {
+    if (currentMediaIndex >= carouselData.length) {
+      setCurrentMediaIndex(0);
+    }
+  }, [currentMediaIndex, carouselData.length]);
+
+  const currentMedia = carouselData[currentMediaIndex];
 
   // Calculate the ID of the menu item to highlight
   // The main_dish_id corresponds to the index of the item within the 'mains' category
   let highlightedItemId: string | undefined;
-  if (currentMedia.main_dish_id !== undefined) {
-    const mainsCategory = menuDataWithSoldOut.find(cat => cat.id === 'mains');
+  if (currentMedia && currentMedia.main_dish_id !== undefined) {
+    const mainsCategory = menuData.find(cat => cat.id === 'mains');
     // Ensure the category exists and the index is within bounds
     if (mainsCategory && mainsCategory.items[currentMedia.main_dish_id]) {
       const highlightedItem = mainsCategory.items[currentMedia.main_dish_id];
@@ -43,6 +99,50 @@ const App: React.FC = () => {
         highlightedItemId = highlightedItem.id;
       }
     }
+  }
+
+  const updateMenuItem = (
+    categoryId: string,
+    itemId: string,
+    field: 'name' | 'description' | 'price' | 'isSoldOut',
+    value: string | number | boolean,
+  ) => {
+    setMenuData((prev) =>
+      prev.map((category) => {
+        if (category.id !== categoryId) {
+          return category;
+        }
+        return {
+          ...category,
+          items: category.items.map((item) =>
+            item.id === itemId ? { ...item, [field]: value } : item,
+          ),
+        };
+      }),
+    );
+  };
+
+  const updateCarouselItem = (itemId: string, field: 'title' | 'subtitle', value: string) => {
+    setCarouselData((prev) =>
+      prev.map((item) => (item.id === itemId ? { ...item, [field]: value } : item)),
+    );
+  };
+
+  const resetConfig = () => {
+    const defaultMenu = buildDefaultMenuData();
+    const defaultCarousel = buildDefaultCarouselData();
+    setMenuData(defaultMenu);
+    setCarouselData(defaultCarousel);
+    setCurrentMediaIndex(0);
+    localStorage.removeItem(CONFIG_STORAGE_KEY);
+  };
+
+  if (!currentMedia) {
+    return (
+      <div className="w-screen h-screen bg-black flex items-center justify-center text-white">
+        No carousel media configured.
+      </div>
+    );
   }
 
   return (
@@ -64,15 +164,33 @@ const App: React.FC = () => {
 
           {/* Bottom-Left: height is derived from left-column width via fixed aspect ratio */}
           <div className="w-full aspect-[3/4]">
-            <MediaCarousel media={CAROUSEL_DATA} currentIndex={currentMediaIndex} />
+            <MediaCarousel media={carouselData} currentIndex={currentMediaIndex} />
           </div>
         </div>
 
         {/* Right Column container - Menu */}
-        <div className="h-full min-h-0">
-          <MenuDisplay categories={menuDataWithSoldOut} highlightedItemId={highlightedItemId} />
+        <div className="h-full min-h-0 relative">
+          <MenuDisplay categories={menuData} highlightedItemId={highlightedItemId} />
+          <button
+            type="button"
+            onClick={() => setIsConfigOpen(true)}
+            aria-label="Open menu configuration"
+            className="absolute bottom-4 right-4 z-30 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#f3c453]/35 bg-black/25 text-[#f5dba8]/55 hover:bg-black/45 hover:text-[#f5dba8]/80"
+          >
+            <Settings2 className="h-4 w-4" />
+          </button>
         </div>
       </div>
+
+      <ConfigModal
+        open={isConfigOpen}
+        categories={menuData}
+        carouselData={carouselData}
+        onClose={() => setIsConfigOpen(false)}
+        onReset={resetConfig}
+        onUpdateMenuItem={updateMenuItem}
+        onUpdateCarouselItem={updateCarouselItem}
+      />
     </div>
   );
 };
