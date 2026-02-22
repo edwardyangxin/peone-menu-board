@@ -2,6 +2,7 @@
 import { CarouselMedia, MenuCategory } from './types';
 
 export const APP_NAME = "Peoné";
+export const SOLD_OUT_ITEM_IDS = ['m1', 'm2', 'm3', 'm7']; // Configurable sold-out item IDs
 
 export const CAROUSEL_DATA: CarouselMedia[] = [
   // {

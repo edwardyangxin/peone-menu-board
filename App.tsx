@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Logo from './components/Logo';
 import MediaCarousel from './components/MediaCarousel';
 import MenuDisplay from './components/MenuDisplay';
-import { MENU_DATA, CAROUSEL_DATA } from './constants';
+import { MENU_DATA, CAROUSEL_DATA, SOLD_OUT_ITEM_IDS } from './constants';
 
 const App: React.FC = () => {
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const soldOutItemIdSet = useMemo(() => new Set(SOLD_OUT_ITEM_IDS), []);
+  const menuDataWithSoldOut = useMemo(
+    () =>
+      MENU_DATA.map((category) => ({
+        ...category,
+        items: category.items.map((item) => ({
+          ...item,
+          isSoldOut: item.isSoldOut || soldOutItemIdSet.has(item.id),
+        })),
+      })),
+    [soldOutItemIdSet],
+  );
 
   // Main slideshow timer controls both the Carousel image and the Logo title
   useEffect(() => {
@@ -23,10 +35,13 @@ const App: React.FC = () => {
   // The main_dish_id corresponds to the index of the item within the 'mains' category
   let highlightedItemId: string | undefined;
   if (currentMedia.main_dish_id !== undefined) {
-    const mainsCategory = MENU_DATA.find(cat => cat.id === 'mains');
+    const mainsCategory = menuDataWithSoldOut.find(cat => cat.id === 'mains');
     // Ensure the category exists and the index is within bounds
     if (mainsCategory && mainsCategory.items[currentMedia.main_dish_id]) {
-      highlightedItemId = mainsCategory.items[currentMedia.main_dish_id].id;
+      const highlightedItem = mainsCategory.items[currentMedia.main_dish_id];
+      if (!highlightedItem.isSoldOut) {
+        highlightedItemId = highlightedItem.id;
+      }
     }
   }
 
@@ -55,7 +70,7 @@ const App: React.FC = () => {
 
         {/* Right Column container - Menu */}
         <div className="h-full min-h-0">
-          <MenuDisplay categories={MENU_DATA} highlightedItemId={highlightedItemId} />
+          <MenuDisplay categories={menuDataWithSoldOut} highlightedItemId={highlightedItemId} />
         </div>
       </div>
     </div>

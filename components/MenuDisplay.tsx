@@ -1,6 +1,6 @@
 import React from 'react';
 import { MenuCategory, MenuItem } from '../types';
-import { Flame, Star, UtensilsCrossed, Clock, Megaphone, Sparkles } from 'lucide-react';
+import { Flame, Star, UtensilsCrossed, Clock, Megaphone, Sparkles, CircleOff } from 'lucide-react';
 
 interface MenuDisplayProps {
   categories: MenuCategory[];
@@ -20,12 +20,18 @@ const TagPill: React.FC<{ children: React.ReactNode; icon?: React.ReactNode; hig
 
 const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: boolean }> = ({ item, index, isHighlighted }) => {
   const shouldShowNumber = item.showNumber !== false;
+  const isSoldOut = item.isSoldOut === true;
   const descriptionIndentClass = shouldShowNumber ? 'pl-[4vh]' : 'pl-[0.2vh]';
+  const effectiveHighlight = isHighlighted && !isSoldOut;
 
   return (
     <div
       className={`flex justify-between items-start px-[1.6vh] py-[0.85vh] rounded-[1.1vh] transition-all duration-300 ${
-        isHighlighted ? 'bg-[#f9c62b] text-[#4f0810] shadow-[inset_0_0_0_1px_rgba(125,10,19,0.2)]' : 'text-white'
+        effectiveHighlight
+          ? 'bg-[#f9c62b] text-[#4f0810] shadow-[inset_0_0_0_1px_rgba(125,10,19,0.2)]'
+          : isSoldOut
+            ? 'bg-[#6d0b12]/35 text-[#f8d2d2]/70'
+            : 'text-white'
       }`}
     >
       <div className="flex-1 pr-[1.5vh] min-w-0">
@@ -33,21 +39,21 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
           {shouldShowNumber && (
             <span
               className={`w-[3.2vh] h-[3.2vh] rounded-full flex items-center justify-center text-[2vh] font-black leading-none shrink-0 ${
-                isHighlighted ? 'bg-[#7d0a13] text-[#f9c62b]' : 'bg-[#f9c62b] text-[#7d0a13]'
+                effectiveHighlight ? 'bg-[#7d0a13] text-[#f9c62b]' : 'bg-[#f9c62b] text-[#7d0a13]'
               }`}
             >
               {index + 1}
             </span>
           )}
 
-          <h3 className={`font-extrabold leading-none text-[4vh] md:text-[3.9vh] ${isHighlighted ? 'text-[#5a0810]' : 'text-white'}`}>
+          <h3 className={`font-extrabold leading-none text-[4vh] md:text-[3.9vh] ${effectiveHighlight ? 'text-[#5a0810]' : isSoldOut ? 'text-[#ffd6d6]/80 line-through' : 'text-white'}`}>
             {item.name}
           </h3>
 
           <div className="flex gap-[0.45vh] flex-wrap">
             {item.isPopular && (
               <TagPill
-                highlighted={isHighlighted}
+                highlighted={effectiveHighlight}
                 icon={<Star className="w-[1.25vh] h-[1.25vh] mr-[0.25vh] fill-current" />}
               >
                 POPULAR
@@ -55,7 +61,7 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
             )}
             {item.isSpicy && (
               <TagPill
-                highlighted={isHighlighted}
+                highlighted={effectiveHighlight}
                 icon={<Flame className="w-[1.25vh] h-[1.25vh] mr-[0.25vh] fill-current" />}
               >
                 SPICY
@@ -63,7 +69,7 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
             )}
             {item.isComingSoon && (
               <TagPill
-                highlighted={isHighlighted}
+                highlighted={effectiveHighlight}
                 icon={<Clock className="w-[1.25vh] h-[1.25vh] mr-[0.25vh]" />}
               >
                 COMING SOON
@@ -71,7 +77,7 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
             )}
             {item.isPromotion && (
               <TagPill
-                highlighted={isHighlighted}
+                highlighted={effectiveHighlight}
                 icon={<Megaphone className="w-[1.25vh] h-[1.25vh] mr-[0.25vh] fill-current" />}
               >
                 PROMOTION
@@ -79,10 +85,18 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
             )}
             {item.isSeasonalSpecial && (
               <TagPill
-                highlighted={isHighlighted}
+                highlighted={effectiveHighlight}
                 icon={<Sparkles className="w-[1.25vh] h-[1.25vh] mr-[0.25vh]" />}
               >
                 SEASONAL SPECIAL
+              </TagPill>
+            )}
+            {isSoldOut && (
+              <TagPill
+                highlighted={false}
+                icon={<CircleOff className="w-[1.25vh] h-[1.25vh] mr-[0.25vh]" />}
+              >
+                SOLD OUT
               </TagPill>
             )}
           </div>
@@ -91,7 +105,7 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
         {item.description && (
           <p
             className={`leading-tight text-[2.05vh] ${descriptionIndentClass} ${
-              isHighlighted ? 'text-[#5a0810]/95 font-semibold' : 'text-[#f5d8d8] font-medium'
+              effectiveHighlight ? 'text-[#5a0810]/95 font-semibold' : isSoldOut ? 'text-[#f3c4c4]/65 font-medium' : 'text-[#f5d8d8] font-medium'
             }`}
           >
             {item.description}
@@ -100,21 +114,25 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
       </div>
 
       <div className="flex flex-col items-end justify-start pt-[0.2vh] shrink-0">
-        {item.originalPrice ? (
+        {isSoldOut ? (
+          <span className="font-black tabular-nums text-[3.2vh] leading-none text-[#ffd9a4]">
+            SOLD OUT
+          </span>
+        ) : item.originalPrice ? (
           <>
             <span
               className={`line-through text-[2.25vh] leading-none mb-[0.3vh] ${
-                isHighlighted ? 'text-[#7d0a13]/70' : 'text-[#f5d8d8]/70'
+                effectiveHighlight ? 'text-[#7d0a13]/70' : 'text-[#f5d8d8]/70'
               }`}
             >
               ${item.originalPrice}
             </span>
-            <span className={`font-black tabular-nums text-[4.6vh] leading-none ${isHighlighted ? 'text-[#5a0810]' : 'text-white'}`}>
+            <span className={`font-black tabular-nums text-[4.6vh] leading-none ${effectiveHighlight ? 'text-[#5a0810]' : 'text-white'}`}>
               ${item.price}
             </span>
           </>
         ) : (
-          <span className={`font-black tabular-nums text-[4.6vh] leading-none ${isHighlighted ? 'text-[#5a0810]' : 'text-white'}`}>
+          <span className={`font-black tabular-nums text-[4.6vh] leading-none ${effectiveHighlight ? 'text-[#5a0810]' : 'text-white'}`}>
             ${item.price}
           </span>
         )}

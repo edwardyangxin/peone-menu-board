@@ -11,6 +11,7 @@ export interface MenuItem {
   isComingSoon?: boolean;
   isPromotion?: boolean;
   isSeasonalSpecial?: boolean;
+  isSoldOut?: boolean;
 }
 
 export interface MenuCategory {
