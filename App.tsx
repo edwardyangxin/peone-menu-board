@@ -3,7 +3,13 @@ import Logo from './components/Logo';
 import MediaCarousel from './components/MediaCarousel';
 import MenuDisplay from './components/MenuDisplay';
 import ConfigModal from './components/ConfigModal';
-import { MENU_DATA, CAROUSEL_DATA, SOLD_OUT_ITEM_IDS } from './constants';
+import {
+  MENU_DATA,
+  CAROUSEL_DATA,
+  SOLD_OUT_ITEM_IDS,
+  HIDDEN_MENU_ITEM_IDS,
+  HIDDEN_CAROUSEL_ITEM_IDS,
+} from './constants';
 import { MenuCategory, CarouselMedia } from './types';
 import { Settings2 } from 'lucide-react';
 
@@ -16,17 +22,39 @@ interface PersistedConfig {
 
 const buildDefaultMenuData = (): MenuCategory[] => {
   const soldOutSet = new Set(SOLD_OUT_ITEM_IDS);
+  const hiddenMenuItemSet = new Set(HIDDEN_MENU_ITEM_IDS);
   return MENU_DATA.map((category) => ({
     ...category,
-    items: category.items.map((item) => ({
-      ...item,
-      isSoldOut: item.isSoldOut || soldOutSet.has(item.id),
-    })),
-  }));
+    items: category.items
+      .filter((item) => !hiddenMenuItemSet.has(item.id))
+      .map((item) => ({
+        ...item,
+        isSoldOut: item.isSoldOut || soldOutSet.has(item.id),
+      })),
+  })).filter((category) => category.items.length > 0);
 };
 
-const buildDefaultCarouselData = (): CarouselMedia[] =>
-  CAROUSEL_DATA.map((item) => ({ ...item }));
+const buildDefaultCarouselData = (): CarouselMedia[] => {
+  const hiddenCarouselItemSet = new Set(HIDDEN_CAROUSEL_ITEM_IDS);
+  return CAROUSEL_DATA
+    .filter((item) => !hiddenCarouselItemSet.has(item.id))
+    .map((item) => ({ ...item }));
+};
+
+const sanitizePersistedMenuData = (rawMenu: MenuCategory[]): MenuCategory[] => {
+  const hiddenMenuItemSet = new Set(HIDDEN_MENU_ITEM_IDS);
+  return rawMenu
+    .map((category) => ({
+      ...category,
+      items: category.items.filter((item) => !hiddenMenuItemSet.has(item.id)),
+    }))
+    .filter((category) => category.items.length > 0);
+};
+
+const sanitizePersistedCarouselData = (rawCarousel: CarouselMedia[]): CarouselMedia[] => {
+  const hiddenCarouselItemSet = new Set(HIDDEN_CAROUSEL_ITEM_IDS);
+  return rawCarousel.filter((item) => !hiddenCarouselItemSet.has(item.id));
+};
 
 const loadPersistedConfig = (): PersistedConfig | null => {
   try {
@@ -53,8 +81,8 @@ const App: React.FC = () => {
   useEffect(() => {
     const persisted = loadPersistedConfig();
     if (persisted) {
-      setMenuData(persisted.menuData);
-      setCarouselData(persisted.carouselData);
+      setMenuData(sanitizePersistedMenuData(persisted.menuData));
+      setCarouselData(sanitizePersistedCarouselData(persisted.carouselData));
     }
   }, []);
 

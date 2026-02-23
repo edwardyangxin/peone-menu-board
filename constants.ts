@@ -3,6 +3,8 @@ import { CarouselMedia, MenuCategory } from './types';
 
 export const APP_NAME = "Peoné";
 export const SOLD_OUT_ITEM_IDS = []; // Configurable sold-out item IDs
+export const HIDDEN_MENU_ITEM_IDS = ['m7']; // Hide Chicken Fried Rice / Chow Mein for now
+export const HIDDEN_CAROUSEL_ITEM_IDS = ['4', '5']; // Hide fried rice / chow mein slides for now
 
 export const CAROUSEL_DATA: CarouselMedia[] = [
   // {

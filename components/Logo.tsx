@@ -25,10 +25,10 @@ const Logo: React.FC<LogoProps> = ({ title, subtitle }) => {
   };
 
   return (
-    <div className="h-full w-full bg-gradient-to-br from-[#b50f1a] via-[#980d17] to-[#6f0a12] rounded-3xl border border-[#f3c453]/70 flex flex-col items-center justify-center shadow-2xl px-[1vh] py-[1vh] relative overflow-hidden group text-center">
+    <div className="h-full w-full bg-gradient-to-br from-[#ef2a40] via-[#d41c31] to-[#a61224] rounded-3xl border border-[#f3c453]/78 flex flex-col items-center justify-center shadow-2xl px-[1vh] py-[1vh] relative overflow-hidden group text-center">
       <div className="absolute top-0 left-0 w-full h-[0.9vh] bg-gradient-to-r from-[#ffde7a] via-[#f9c62b] to-[#ffde7a]"></div>
       {/* Background decorative glow */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-amber-200/18 to-transparent opacity-60"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-amber-200/26 to-transparent opacity-70"></div>
       
       {/* Dynamic Title Display */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full w-full min-h-0">

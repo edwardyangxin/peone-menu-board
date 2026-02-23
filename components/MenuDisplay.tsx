@@ -155,7 +155,7 @@ const MenuItemRow: React.FC<{
 
 const MenuDisplay: React.FC<MenuDisplayProps> = ({ categories, highlightedItemId, onToggleItemSoldOut }) => {
   return (
-    <div className="h-full w-full bg-gradient-to-br from-[#b60f1b] via-[#9a0d18] to-[#760a13] rounded-3xl border border-[#f3c453]/70 shadow-2xl relative overflow-hidden flex flex-col">
+    <div className="h-full w-full bg-gradient-to-br from-[#e31f33] via-[#c8162a] to-[#93101e] rounded-3xl border border-[#f3c453]/78 shadow-2xl relative overflow-hidden flex flex-col">
       <div className="absolute top-0 left-0 w-full h-[0.9vh] bg-gradient-to-r from-[#ffde7a] via-[#f9c62b] to-[#ffde7a] z-20"></div>
 
       <div className="flex-1 flex flex-col p-[3.5vh] relative z-10 h-full justify-between">
