@@ -5,6 +5,7 @@ import { Flame, Star, UtensilsCrossed, Clock, Megaphone, Sparkles, CircleOff } f
 interface MenuDisplayProps {
   categories: MenuCategory[];
   highlightedItemId?: string;
+  onToggleItemSoldOut?: (categoryId: string, itemId: string, currentIsSoldOut: boolean) => void;
 }
 
 const TagPill: React.FC<{ children: React.ReactNode; icon?: React.ReactNode; highlighted?: boolean }> = ({ children, icon, highlighted }) => (
@@ -18,21 +19,32 @@ const TagPill: React.FC<{ children: React.ReactNode; icon?: React.ReactNode; hig
   </span>
 );
 
-const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: boolean }> = ({ item, index, isHighlighted }) => {
+const MenuItemRow: React.FC<{
+  categoryId: string;
+  item: MenuItem;
+  index: number;
+  isHighlighted: boolean;
+  onToggleItemSoldOut?: (categoryId: string, itemId: string, currentIsSoldOut: boolean) => void;
+}> = ({ categoryId, item, index, isHighlighted, onToggleItemSoldOut }) => {
   const shouldShowNumber = item.showNumber !== false;
   const isSoldOut = item.isSoldOut === true;
   const descriptionIndentClass = shouldShowNumber ? 'pl-[4vh]' : 'pl-[0.2vh]';
   const effectiveHighlight = isHighlighted && !isSoldOut;
+  const isClickable = typeof onToggleItemSoldOut === 'function';
 
   return (
-    <div
-      className={`flex justify-between items-start px-[1.6vh] py-[0.85vh] rounded-[1.1vh] transition-all duration-300 ${
+    <button
+      type="button"
+      onClick={() => onToggleItemSoldOut?.(categoryId, item.id, isSoldOut)}
+      className={`w-full text-left flex justify-between items-start px-[1.6vh] py-[0.85vh] rounded-[1.1vh] transition-all duration-300 ${
         effectiveHighlight
           ? 'bg-[#f9c62b] text-[#4f0810] shadow-[inset_0_0_0_1px_rgba(125,10,19,0.2)]'
           : isSoldOut
             ? 'bg-[#6d0b12]/35 text-[#f8d2d2]/70'
             : 'text-white'
-      }`}
+      } ${isClickable ? 'cursor-pointer hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f9c62b]/70' : ''}`}
+      aria-label={`${item.name} sold out toggle`}
+      disabled={!isClickable}
     >
       <div className="flex-1 pr-[1.5vh] min-w-0">
         <div className="flex items-center gap-[0.8vh] mb-[0.35vh] flex-wrap">
@@ -137,11 +149,11 @@ const MenuItemRow: React.FC<{ item: MenuItem; index: number; isHighlighted: bool
           </span>
         )}
       </div>
-    </div>
+    </button>
   );
 };
 
-const MenuDisplay: React.FC<MenuDisplayProps> = ({ categories, highlightedItemId }) => {
+const MenuDisplay: React.FC<MenuDisplayProps> = ({ categories, highlightedItemId, onToggleItemSoldOut }) => {
   return (
     <div className="h-full w-full bg-gradient-to-br from-[#b60f1b] via-[#9a0d18] to-[#760a13] rounded-3xl border border-[#f3c453]/70 shadow-2xl relative overflow-hidden flex flex-col">
       <div className="absolute top-0 left-0 w-full h-[0.9vh] bg-gradient-to-r from-[#ffde7a] via-[#f9c62b] to-[#ffde7a] z-20"></div>
@@ -159,7 +171,14 @@ const MenuDisplay: React.FC<MenuDisplayProps> = ({ categories, highlightedItemId
 
             <div className="flex-1 flex flex-col justify-evenly gap-[0.3vh]">
               {category.items.map((item, idx) => (
-                <MenuItemRow key={item.id} item={item} index={idx} isHighlighted={item.id === highlightedItemId} />
+                <MenuItemRow
+                  key={item.id}
+                  categoryId={category.id}
+                  item={item}
+                  index={idx}
+                  isHighlighted={item.id === highlightedItemId}
+                  onToggleItemSoldOut={onToggleItemSoldOut}
+                />
               ))}
             </div>
 

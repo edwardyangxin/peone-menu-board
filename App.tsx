@@ -121,6 +121,10 @@ const App: React.FC = () => {
       }),
     );
   };
+  
+  const toggleMenuItemSoldOut = (categoryId: string, itemId: string, currentIsSoldOut: boolean) => {
+    updateMenuItem(categoryId, itemId, 'isSoldOut', !currentIsSoldOut);
+  };
 
   const updateCarouselItem = (itemId: string, field: 'title' | 'subtitle', value: string) => {
     setCarouselData((prev) =>
@@ -170,7 +174,11 @@ const App: React.FC = () => {
 
         {/* Right Column container - Menu */}
         <div className="h-full min-h-0 relative">
-          <MenuDisplay categories={menuData} highlightedItemId={highlightedItemId} />
+          <MenuDisplay
+            categories={menuData}
+            highlightedItemId={highlightedItemId}
+            onToggleItemSoldOut={toggleMenuItemSoldOut}
+          />
           <button
             type="button"
             onClick={() => setIsConfigOpen(true)}
